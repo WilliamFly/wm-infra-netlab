@@ -18,6 +18,9 @@ is documented as an ADR so the reasoning is preserved, not just the result.
 
 ## Architecture (high level)
 
+Target end-state — not all of this exists yet; see Phases below for
+what's actually built so far:
+
 ```
                     [Reverse Proxy / LB]
                     /        \
@@ -53,7 +56,7 @@ Full diagram and component breakdown: [`docs/architecture.md`](docs/architecture
 | [`wm-infra-netlab-network-foundation`](https://github.com/WilliamFly/wm-infra-netlab-network-foundation) | Phase 1 — Terraform + libvirt networks, router VM |
 | [`wm-infra-netlab-harden-baseline`](https://github.com/WilliamFly/wm-infra-netlab-harden-baseline) | Shared Ansible role — SSH/firewall/fail2ban hardening |
 | [`wm-infra-netlab-db`](https://github.com/WilliamFly/wm-infra-netlab-db) | Shared Postgres VM — single owner, apps connect by IP |
-| `wm-infra-netlab-app-rust` | Rust app (VM path + Docker path) |
+| [`wm-infra-netlab-app-rust`](https://github.com/WilliamFly/wm-infra-netlab-app-rust) | Rust app (VM path + Docker path) |
 | `wm-infra-netlab-app-node` | Node app (VM path + Docker path) |
 
 *(Links added as each repo is created.)*
@@ -73,9 +76,20 @@ the old one and both are updated to reflect that.
 
 ## Running this yourself
 
-*(Instructions will be added here once Phase 1 is buildable end-to-end —
-this section will cover prerequisites, clone order, and how to stand up
-the whole lab from scratch.)*
+Clone order matters — later repos depend on earlier ones being applied
+first:
+
+1. `wm-infra-netlab-network-foundation` — networks + router. Apply this
+   first; nothing else works without it.
+2. `wm-infra-netlab-harden-baseline` — nothing to clone/apply directly;
+   pulled automatically via `ansible-galaxy` by repos that need it.
+3. `wm-infra-netlab-db` — the shared database. Needs step 1 applied and
+   reachable first. See that repo's README for a manual provisioning
+   step currently required (ADR 0005).
+4. `wm-infra-netlab-app-rust` — needs steps 1 and 3 applied first.
+
+Each repo's own README has exact `terraform apply` / `ansible-playbook`
+instructions for that piece.
 
 ## Security note
 
