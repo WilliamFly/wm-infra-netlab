@@ -42,7 +42,7 @@ Full diagram and component breakdown: [`docs/architecture.md`](docs/architecture
 | Phase | Description | Status |
 |---|---|---|
 | 1 | Network foundation — libvirt 3-tier network + router VM (Terraform + Ansible) | **Complete** — segmentation, NAT, and forwarding verified end-to-end with real traffic |
-| 2 | Rust app — VM path & Docker path | In progress — infra proven end-to-end (app VM on private-net reaches shared DB on data-net through the router); app code not yet written |
+| 2 | Rust app — VM path & Docker path | VM path **complete** — app deployed and verified end-to-end (`/`, `/health`, `/visits` all working through the router). Docker path not started |
 | 3 | Node app — VM path & Docker path | Not started |
 | 4 | CI/CD pipeline (build, migrate, pull-based deploy) | Not started |
 | 5 | NIDS / packet capture layer | Not started |
@@ -74,6 +74,7 @@ the old one and both are updated to reflect that.
 - [0004 — Shared Stateful Resources Get Their Own Repo](docs/decisions/0004-shared-db-own-repo.md)
 - [0005 — Isolated-Tier VMs Can't Live-Install Packages](docs/decisions/0005-isolated-tier-provisioning.md)
 - [0006 — Router Gateway IPs Moved Off .1 to Avoid Libvirt Bridge Collision](docs/decisions/0006-router-gateway-ip-collision.md)
+- [0007 — Explicit Disk Sizing Required for Every Cloned VM Volume](docs/decisions/0007-explicit-disk-sizing.md)
 
 ## Running this yourself
 
