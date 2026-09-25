@@ -50,8 +50,8 @@ Full diagram and component breakdown: [`docs/architecture.md`](docs/architecture
 | Repo | Purpose |
 |---|---|
 | `wm-infra-netlab` | This repo — docs, ADRs, orchestration |
-| `wm-infra-netlab-network-foundation` | Phase 1 — Terraform + libvirt networks, router VM |
-| `wm-infra-netlab-harden-baseline` | Shared Ansible role — SSH/firewall/fail2ban hardening |
+| [`wm-infra-netlab-network-foundation`](https://github.com/WilliamFly/wm-infra-netlab-network-foundation) | Phase 1 — Terraform + libvirt networks, router VM |
+| [`wm-infra-netlab-harden-baseline`](https://github.com/WilliamFly/wm-infra-netlab-harden-baseline) | Shared Ansible role — SSH/firewall/fail2ban hardening |
 | `wm-infra-netlab-app-rust` | Rust app (VM path + Docker path) |
 | `wm-infra-netlab-app-node` | Node app (VM path + Docker path) |
 
@@ -66,6 +66,7 @@ the old one and both are updated to reflect that.
 
 - [0001 — Network Segmentation Approach](docs/decisions/0001-network-segmentation.md)
 - [0002 — Single Multi-Homed Router VM](docs/decisions/0002-single-router-vm.md)
+- [0003 — Shared Roles Referenced via Git, Not Copied](docs/decisions/0003-shared-roles-via-git.md)
 
 ## Running this yourself
 
