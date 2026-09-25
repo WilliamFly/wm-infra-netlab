@@ -73,6 +73,7 @@ the old one and both are updated to reflect that.
 - [0003 — Shared Roles Referenced via Git, Not Copied](docs/decisions/0003-shared-roles-via-git.md)
 - [0004 — Shared Stateful Resources Get Their Own Repo](docs/decisions/0004-shared-db-own-repo.md)
 - [0005 — Isolated-Tier VMs Can't Live-Install Packages](docs/decisions/0005-isolated-tier-provisioning.md)
+- [0006 — Router Gateway IPs Moved Off .1 to Avoid Libvirt Bridge Collision](docs/decisions/0006-router-gateway-ip-collision.md)
 
 ## Running this yourself
 
