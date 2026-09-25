@@ -39,7 +39,7 @@ Full diagram and component breakdown: [`docs/architecture.md`](docs/architecture
 | Phase | Description | Status |
 |---|---|---|
 | 1 | Network foundation — libvirt 3-tier network + router VM (Terraform + Ansible) | **Complete** — segmentation, NAT, and forwarding verified end-to-end with real traffic |
-| 2 | Rust app — VM path & Docker path | Not started |
+| 2 | Rust app — VM path & Docker path | In progress — infra proven end-to-end (app VM on private-net reaches shared DB on data-net through the router); app code not yet written |
 | 3 | Node app — VM path & Docker path | Not started |
 | 4 | CI/CD pipeline (build, migrate, pull-based deploy) | Not started |
 | 5 | NIDS / packet capture layer | Not started |
