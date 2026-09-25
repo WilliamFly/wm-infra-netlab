@@ -52,6 +52,7 @@ Full diagram and component breakdown: [`docs/architecture.md`](docs/architecture
 | `wm-infra-netlab` | This repo — docs, ADRs, orchestration |
 | [`wm-infra-netlab-network-foundation`](https://github.com/WilliamFly/wm-infra-netlab-network-foundation) | Phase 1 — Terraform + libvirt networks, router VM |
 | [`wm-infra-netlab-harden-baseline`](https://github.com/WilliamFly/wm-infra-netlab-harden-baseline) | Shared Ansible role — SSH/firewall/fail2ban hardening |
+| [`wm-infra-netlab-db`](https://github.com/WilliamFly/wm-infra-netlab-db) | Shared Postgres VM — single owner, apps connect by IP |
 | `wm-infra-netlab-app-rust` | Rust app (VM path + Docker path) |
 | `wm-infra-netlab-app-node` | Node app (VM path + Docker path) |
 
@@ -67,6 +68,8 @@ the old one and both are updated to reflect that.
 - [0001 — Network Segmentation Approach](docs/decisions/0001-network-segmentation.md)
 - [0002 — Single Multi-Homed Router VM](docs/decisions/0002-single-router-vm.md)
 - [0003 — Shared Roles Referenced via Git, Not Copied](docs/decisions/0003-shared-roles-via-git.md)
+- [0004 — Shared Stateful Resources Get Their Own Repo](docs/decisions/0004-shared-db-own-repo.md)
+- [0005 — Isolated-Tier VMs Can't Live-Install Packages](docs/decisions/0005-isolated-tier-provisioning.md)
 
 ## Running this yourself
 
