@@ -65,6 +65,7 @@ never edited after acceptance — if a decision changes, a new ADR supersedes
 the old one and both are updated to reflect that.
 
 - [0001 — Network Segmentation Approach](docs/decisions/0001-network-segmentation.md)
+- [0002 — Single Multi-Homed Router VM](docs/decisions/0002-single-router-vm.md)
 
 ## Running this yourself
 
