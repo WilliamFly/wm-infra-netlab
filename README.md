@@ -29,6 +29,7 @@ what's actually built so far:
                   [Database]
 ```
 
+
 Three-tier network (public / private / data), a router VM doing NAT +
 firewalling between them, mirroring how an AWS VPC routes traffic between
 subnets — see [ADR 0001](docs/decisions/0001-network-segmentation.md) for
@@ -42,8 +43,8 @@ Full diagram and component breakdown: [`docs/architecture.md`](docs/architecture
 | Phase | Description | Status |
 |---|---|---|
 | 1 | Network foundation — libvirt 3-tier network + router VM (Terraform + Ansible) | **Complete** — segmentation, NAT, and forwarding verified end-to-end with real traffic |
-| 2 | Rust app — VM path & Docker path | VM path **complete** — app deployed and verified end-to-end (`/`, `/health`, `/visits` all working through the router). Docker path not started |
-| 3 | Node app — VM path & Docker path | Not started |
+| 2 | Rust app — VM path & Docker path | **Complete** — both paths deployed, hardened, and verified end-to-end (`/`, `/health`, `/visits`), including a real Docker-published-port firewall bug found and fixed (ADR 0009) |
+| 3 | Node app — VM path & Docker path | **Complete** — both paths deployed, hardened, and verified end-to-end, sharing the same DB as the Rust app |
 | 4 | CI/CD pipeline (build, migrate, pull-based deploy) | Not started |
 | 5 | NIDS / packet capture layer | Not started |
 | 6 | Port to AWS (VPC, remote state, IAM, ALB) | Not started |
@@ -55,11 +56,10 @@ Full diagram and component breakdown: [`docs/architecture.md`](docs/architecture
 | `wm-infra-netlab` | This repo — docs, ADRs, orchestration |
 | [`wm-infra-netlab-network-foundation`](https://github.com/WilliamFly/wm-infra-netlab-network-foundation) | Phase 1 — Terraform + libvirt networks, router VM |
 | [`wm-infra-netlab-harden-baseline`](https://github.com/WilliamFly/wm-infra-netlab-harden-baseline) | Shared Ansible role — SSH/firewall/fail2ban hardening |
+| [`wm-infra-netlab-docker-host`](https://github.com/WilliamFly/wm-infra-netlab-docker-host) | Shared Ansible role — Docker Engine install + DOCKER-USER firewall fix |
 | [`wm-infra-netlab-db`](https://github.com/WilliamFly/wm-infra-netlab-db) | Shared Postgres VM — single owner, apps connect by IP |
 | [`wm-infra-netlab-app-rust`](https://github.com/WilliamFly/wm-infra-netlab-app-rust) | Rust app (VM path + Docker path) |
-| `wm-infra-netlab-app-node` | Node app (VM path + Docker path) |
-
-*(Links added as each repo is created.)*
+| [`wm-infra-netlab-app-node`](https://github.com/WilliamFly/wm-infra-netlab-app-node) | Node app (VM path + Docker path) |
 
 ## Decisions
 
@@ -75,6 +75,8 @@ the old one and both are updated to reflect that.
 - [0005 — Isolated-Tier VMs Can't Live-Install Packages](docs/decisions/0005-isolated-tier-provisioning.md)
 - [0006 — Router Gateway IPs Moved Off .1 to Avoid Libvirt Bridge Collision](docs/decisions/0006-router-gateway-ip-collision.md)
 - [0007 — Explicit Disk Sizing Required for Every Cloned VM Volume](docs/decisions/0007-explicit-disk-sizing.md)
+- [0008 — Scope Firewall Rules to a Source Subnet](docs/decisions/0008-scoped-firewall-rules.md)
+- [0009 — Docker-Published Ports Bypass ufw](docs/decisions/0009-docker-bypasses-ufw.md)
 
 ## Running this yourself
 
@@ -83,12 +85,14 @@ first:
 
 1. `wm-infra-netlab-network-foundation` — networks + router. Apply this
    first; nothing else works without it.
-2. `wm-infra-netlab-harden-baseline` — nothing to clone/apply directly;
-   pulled automatically via `ansible-galaxy` by repos that need it.
+2. `wm-infra-netlab-harden-baseline` and `wm-infra-netlab-docker-host` —
+   nothing to clone/apply directly; both are pulled automatically via
+   `ansible-galaxy` by repos that need them.
 3. `wm-infra-netlab-db` — the shared database. Needs step 1 applied and
    reachable first. See that repo's README for a manual provisioning
    step currently required (ADR 0005).
-4. `wm-infra-netlab-app-rust` — needs steps 1 and 3 applied first.
+4. `wm-infra-netlab-app-rust` and `wm-infra-netlab-app-node` — either
+   order; both need steps 1 and 3 applied first, and share the same DB.
 
 Each repo's own README has exact `terraform apply` / `ansible-playbook`
 instructions for that piece.
